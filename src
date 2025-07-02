@@ -1,0 +1,54 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+#include <windows.h>
+
+#define red_time 5000
+#define yellow_time 2000
+#define green_time 5000
+#define emergency_green 5000
+
+void wait (int ms){
+	Sleep (ms);
+}
+
+void normal_cycle (){
+	printf ("Red light is turning on! %d ms\n", red_time);
+	wait (red_time);
+	
+	printf ("Yellow light is turning on! %d ms\n", yellow_time);
+	wait (yellow_time);
+	
+	printf ("Green light is turning on! %d ms\n", green_time);
+	wait (green_time);
+}
+
+float sensor_data (float max, float min){
+	float data= min + ((float)rand()/ RAND_MAX)* (max-min);
+	return data;
+}
+
+int emergency_detector (){
+ 	float prob= sensor_data (0.0,1.0);
+ 	if (prob<0.2)
+ 	return 1;
+ 	else
+    return 0;
+}
+
+void emergency_override (){
+	printf ("Emergency!!! Turn on the green light immediately!! %d ms\n", green_time);
+	wait (green_time);
+}
+
+int main (){
+	srand (time(NULL));
+	while (1){
+	if (emergency_detector()){
+		emergency_override();
+	} else {
+		normal_cycle ();
+		}
+	}
+	return 0;
+}
